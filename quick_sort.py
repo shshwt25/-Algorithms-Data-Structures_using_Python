@@ -2,30 +2,45 @@
 
 __author__ = "bt3"
 
-def quick_sort(array):
+
+def qs(array):
+    '''
+    >>> qs([4,1,6,2,7,9,3])
+    [1, 2, 3, 4, 6, 7, 9]
+    '''
     if len(array) < 2:
         return array
 
-    # partition
-    ipivot = len(array)//2
-    pivot = array[ipivot]
-    new_array = array[:ipivot] + array[ipivot+1:]
-    
-    left = [x for x in new_array if x <= pivot]
-    right = [x for x in new_array if x > pivot]
+    piv = len(array)//2
+    piv_element = array[piv]
+    new_array = array[:piv] + array[piv+1:]
 
-    return quick_sort(left) + [pivot] + quick_sort(right)
-    
-    
-    
-    
+    left  = [a for a in new_array if a <= piv_element]
+    right = [a for a in new_array if a > piv_element]
+
+    return qs(left) + [array[piv]] + qs(right)
+
+
+
+# we can also divide them into two functions
+def partition(seq):
+    pi,seq = seq[0],seq[1:]
+    lo = [x for x in seq if x <= pi]
+    hi = [x for x in seq if x > pi]
+    return lo, pi, hi
+
+def quick_sort_divided(seq):
+    '''
+    >>> quick_sort_divided([4,1,6,2,7,9,3])
+    [1, 2, 3, 4, 6, 7, 9]
+    '''
+    if len(seq) < 2:
+        return seq
+    lo, pi, hi = partition(seq)
+    return quick_sort_divided(lo) + [pi] + quick_sort_divided(hi)
+
+
+
 if __name__ == '__main__':
-    array = [3, 1, 6, 0, 7, 19, 7, 2, 22]
-    sorted = [0, 1, 2, 3, 6, 7, 7, 19, 22]
-    assert(quick_sort(array) == sorted)
-    
-    array = []
-    assert(quick_sort(array) == array)
-
-    array = [1]
-    assert(quick_sort(array) == array)
+    import doctest
+    doctest.testmod()
